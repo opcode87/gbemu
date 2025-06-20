@@ -38,7 +38,7 @@ struct Registers
     c: u8,
     d: u8,
     e: u8,
-    f: Flags::new(),
+    f: Flags,
     h: u8,
     l: u8,
 }
@@ -51,6 +51,18 @@ struct Flags {
     carry: bool,
 }
 
+impl Flags {
+    fn new() -> Self {
+        Flags {
+            zero: false,
+            subtract: false,
+            half_carry: false,
+            carry: false,
+        }
+    }
+}
+
+
 // registers can be accessed as either one 16-bit register or as two 8-bit registers.
 
 fn split_u16(value: u16) -> (u8, u8) {
@@ -61,16 +73,28 @@ fn combine_u16(hi: u8, lo: u8) -> u16 {
 }
 
 impl Registers {
-    
+    fn new() -> Self {
+        Registers {
+            a: 0,
+            b: 0,
+            c: 0,
+            d: 0,
+            e: 0,
+            f: Flags::new(),
+            h: 0,
+            l: 0,
+        }
+    }
+
     // af register
     fn get_af(&self) -> u16 {
-        return combine_u16(self.a, self.f);
+        return combine_u16(self.a, u8::from(self.f));
     }
 
     fn set_af(&mut self, value: u16) {
-        let (hi, lo) = split_u16(value)
+        let (hi, lo) = split_u16(value);
         self.a = hi;
-        self.f = lo;
+        self.f = Flags::from(lo);
     }
 
     fn flags()
@@ -81,7 +105,7 @@ impl Registers {
     }
 
     fn set_bc(&mut self, value: u16) {
-        let (hi, lo) = split_u16(value)
+        let (hi, lo) = split_u16(value);
         self.b = hi;
         self.c = lo;
     }
@@ -89,10 +113,10 @@ impl Registers {
     // de register
     fn get_de(&self) -> u16 {
         return combine_u16(self.ad, self.e);
-    }
+    }    LD(LoadType),
 
     fn set_de(&mut self, value: u16) {
-        let (hi, lo) = split_u16(value)
+        let (hi, lo) = split_u16(value);
         self.d = hi;
         self.e = lo;
         
@@ -104,7 +128,7 @@ impl Registers {
     }
 
     fn set_hl(&mut self, value: u16) {
-        let (hi, lo) = split_u16(value)
+        let (hi, lo) = split_u16(value);
         self.h = hi;
         self.l = lo;
         

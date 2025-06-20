@@ -37,7 +37,17 @@ impl CPU {
             }
 
             // 0x41
-            Instruction::LD(target) => {   
+            Instruction::LD(target) => {
+                let value = match target {
+                    ArithmeticTarget::A => self.registers.a,
+                    ArithmeticTarget::B => self.registers.b,
+                    ArithmeticTarget::C => self.registers.c,
+                    ArithmeticTarget::D => self.registers.d,
+                    ArithmeticTarget::E => self.registers.e,
+                    ArithmeticTarget::H => self.registers.h,
+                    ArithmeticTarget::L => self.registers.l,
+                };
+                self.registers.a = self.ld(value);
             }
         }
     }
@@ -45,9 +55,10 @@ impl CPU {
 
      // LD B, C
      // B = C
-    fn ld() -> u8 {
-
+    fn ld(&mut self, value: u8) -> u8 {
+        value
     }
+
 
 
     fn adc(&mut self, value: u8) -> u8 {
