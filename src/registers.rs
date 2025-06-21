@@ -23,7 +23,7 @@ impl std::convert::From<u8> for Flags {
             zero,
             subtract,
             half_carry,
-            carry
+            carry,
         }
     }
 }
@@ -97,8 +97,6 @@ impl Registers {
         self.f = Flags::from(lo);
     }
 
-    fn flags()
-
     // bc register
     fn get_bc(&self) -> u16 {
         return combine_u16(self.b, self.c);
@@ -112,8 +110,8 @@ impl Registers {
     
     // de register
     fn get_de(&self) -> u16 {
-        return combine_u16(self.ad, self.e);
-    }    LD(LoadType),
+        return combine_u16(self.d, self.e);
+    }
 
     fn set_de(&mut self, value: u16) {
         let (hi, lo) = split_u16(value);
